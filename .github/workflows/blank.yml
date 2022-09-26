@@ -24,6 +24,10 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
+        env:
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-        # build image and set tag
+          docker build -t wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
         # push image to registry
+      - name: Push image to dockerhub
+        run: docker push wendokingoo/nodejs-postgres-app:latest
