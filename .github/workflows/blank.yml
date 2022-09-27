@@ -25,14 +25,7 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0.4.0'
         with:
-          credentials_json: '${{ secrets.gcp_credentials }}'
-          
-      - id: 'get-credentials'
-        uses: 'google-github-actions/get-gke-credentials@v0'
-        with:
-          workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-          service_account: '930301429039-compute@developer.gserviceaccount.com'
-      
+          credentials_json: '${{ secrets.gcp_credentials }}'          
       # Runs a single command using the runners shell
       - name: Run a one-line script
         env:
