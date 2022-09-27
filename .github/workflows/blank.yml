@@ -33,6 +33,7 @@ jobs:
         run: |
           ls -al
           docker build -t wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
+          echo ${{ secrets.GOOGLE_CREDENTIALS }}
         # push image to registry
       - name: Push image to dockerhub
         run: docker push wendokingoo/nodejs-postgres-app:latest
