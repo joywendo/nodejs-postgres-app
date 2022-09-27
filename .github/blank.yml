@@ -38,6 +38,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.sha }}
         run: |
+          ls -al
           docker build -t wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
         # push image to registry
       - name: Push image to dockerhub
