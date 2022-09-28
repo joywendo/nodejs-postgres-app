@@ -31,7 +31,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          ls -al
+          ls -a
           docker build -t wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
           echo ${{ secrets.GOOGLE_CREDENTIALS }}
          # docker login
