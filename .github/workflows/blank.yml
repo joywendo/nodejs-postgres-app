@@ -29,7 +29,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         env:
-          IMAGE_TAG: ${{ github.sha }}gi
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           ls -al
           docker build -t wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
