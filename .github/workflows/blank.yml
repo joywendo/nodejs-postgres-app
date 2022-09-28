@@ -17,7 +17,12 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3 
+      # Installs node modules
+      - name: Check out Source Code
+        uses: actions/checkout@v2
+      - name: Setup Nodejs
+        uses: actions/setup-node@v1
 
       # steps
       # configure GCR credentials
@@ -30,11 +35,6 @@ jobs:
       - name: Run a one-line script
         env:
           IMAGE_TAG: ${{ github.sha }}
-      # Installs node modules
-      - name: Check out Source Code
-        uses: actions/checkout@v2
-      - name: Setup Nodejs
-        uses: actions/setup-node@v1
         run: |
           ls -al
           docker build -t wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
