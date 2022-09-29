@@ -38,7 +38,7 @@ jobs:
         run: |
           ls -al
           docker build -t wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
-          echo ${{ secrets.GOOGLE_CREDENTIALS }}
+          echo "docker built"
          # docker login
       - name: Login to Dockerhub
         uses: docker/login-action@v2
