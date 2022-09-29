@@ -48,11 +48,11 @@ jobs:
 
         # Configure docker to use the gcloud command-line tool as a credential helper
       - name: Push image to gcr
-          run: |
+        run: |
             gcloud auth configure-docker -q  
         # Push image to Google Container Registry
-        - name: Build
-          run: |-
+      - name: Build
+        run: |-
             docker push eu.gcr.io/$PROJECT_ID/$SERVICE_NAME:$IMAGE_TAG
 
          # docker login
