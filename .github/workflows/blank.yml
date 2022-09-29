@@ -39,10 +39,9 @@ jobs:
       - name: Run a one-line script
         env:
           IMAGE_TAG: ${{ github.sha }}
-          SERVICE_NAME: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: |
           ls -al
-          docker build -t eu.gcr.io/$PROJECT_ID/$SERVICE_NAME/wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
+          docker build -t eu.gcr.io/$PROJECT_ID/$GOOGLE_CREDENTIALS/wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
           echo "docker built"
 
 
@@ -53,7 +52,7 @@ jobs:
         # Push image to Google Container Registry
       - name: Build
         run: |-
-            docker push eu.gcr.io/$PROJECT_ID/$SERVICE_NAME:$IMAGE_TAG
+            docker push eu.gcr.io/$PROJECT_ID/$GOOGLE_CREDENTIALS:$IMAGE_TAG
 
          # docker login
 
