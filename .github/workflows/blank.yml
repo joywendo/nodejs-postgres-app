@@ -29,14 +29,13 @@ jobs:
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v0.4.0'
-        
         with:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}' 
           project_id: ${{ secrets.PROJECT_ID }}
           export_default_credentials: true
 
         # Configure docker to use the gcloud command-line tool as a credential helper
-        name: 'Set up Cloud SDK'
+      - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
         run: |
             gcloud auth configure-docker europe-west1-docker.pkg.dev
@@ -54,7 +53,7 @@ jobs:
       - name: Pushing Image
         env:
           PROJECT_ID: ${{ secrets.PROJECT_ID}}
-        run: |-
+        run: |
           docker push europe-west1-docker.pkg.dev/hopeful-object-363312/first-image:$IMAGE_TAG
          # docker login
          # europe-west1-docker.pkg.dev/hopeful-object-363312/first-image
