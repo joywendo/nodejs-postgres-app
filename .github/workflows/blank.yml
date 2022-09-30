@@ -54,7 +54,7 @@ jobs:
       - name: Build
         run: |-
           docker push 
-        eu.gcr.io/$PROJECT_ID/wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
+          eu.gcr.io/$PROJECT_ID/wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
 
          # docker login
 
