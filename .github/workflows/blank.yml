@@ -40,8 +40,7 @@ jobs:
       
       - name: 'Set docker configuration'
         run: |
-            gcloud auth configure-docker europe-west1-docker.pkg.dev
-            docker-credential-gcr configure-docker --registries=europe-west1-docker.pkg.dev
+          gcloud auth configure-docker europe-west1-docker.pkg.dev
 
       # building image using docker
       # us-east1-docker.pkg.dev/my-project/my-repo/test-image
