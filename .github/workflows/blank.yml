@@ -33,15 +33,17 @@ jobs:
         with:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}' 
           project_id: ${{ secrets.PROJECT_ID }}
+          registry: eu.gcr.io
           export_default_credentials: true
 
       # building image using docker
       - name: Run a one-line script
         env:
           IMAGE_TAG: ${{ github.sha }}
+          PROJECT: ${{ secrets.PROJECT_ID}}
         run: |
           ls -al
-          docker build -t eu.gcr.io/$PROJECT_ID/$GOOGLE_CREDENTIALS/wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
+          docker build -t eu.gcr.io/$PROJECT/wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
           echo "docker built"
 
 
