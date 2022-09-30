@@ -34,8 +34,6 @@ jobs:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}' 
           project_id: ${{ secrets.PROJECT_ID }}
           registry: eu.gcr.io
-          project_id: PROJECT
-          
           export_default_credentials: true
 
       # building image using docker
