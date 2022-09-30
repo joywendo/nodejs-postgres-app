@@ -41,14 +41,17 @@ jobs:
       - name: 'Set docker configuration'
         run: |
             gcloud auth configure-docker europe-west1-docker.pkg.dev
+            docker-credential-gcr configure-docker --registries=europe-west1-docker.pkg.dev
 
       # building image using docker
+      # us-east1-docker.pkg.dev/my-project/my-repo/test-image
       - name: Building image
         env:
           IMAGE_TAG: ${{ github.sha }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID}}
         run: |
           ls -al
-          docker build -t europe-west1-docker.pkg.dev/hopeful-object-363312/first-image:$IMAGE_TAG .
+          docker build -t europe-west1-docker.pkg.dev/$PROJECT_ID/first-image:$IMAGE_TAG .
           echo "docker built"
 
         # Push image to Google Container Registry
@@ -57,7 +60,7 @@ jobs:
           PROJECT_ID: ${{ secrets.PROJECT_ID}}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker push europe-west1-docker.pkg.dev/hopeful-object-363312/first-image:$IMAGE_TAG
+          docker push europe-west1-docker.pkg.dev/$PROJECT_ID/first-image:$IMAGE_TAG
          # docker login
          # europe-west1-docker.pkg.dev/hopeful-object-363312/first-image
 
