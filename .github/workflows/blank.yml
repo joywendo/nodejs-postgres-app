@@ -32,7 +32,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}' 
           project_id: ${{ secrets.PROJECT_ID }}
-          export_default_credentials: true
+          # export_default_credentials: true
 
         # Configure docker to use the gcloud command-line tool as a credential helper
       - name: 'Set up Cloud SDK'
