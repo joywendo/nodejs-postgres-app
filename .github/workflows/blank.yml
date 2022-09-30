@@ -54,6 +54,7 @@ jobs:
         # Push image to Google Container Registry
       - name: Pushing Image
         env:
+          IMAGE_TAG: ${{ github.sha }}
           PROJECT_ID: ${{ secrets.PROJECT_ID}}
         run: |
           docker push hopeful-object-363312/first-image:$IMAGE_TAG
