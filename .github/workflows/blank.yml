@@ -39,7 +39,6 @@ jobs:
       - name: Run a one-line script
         env:
           IMAGE_TAG: ${{ github.sha }}
-          PROJECT: ${{ secrets.PROJECT_ID}}
         run: |
           ls -al
           docker build -t wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
@@ -52,6 +51,8 @@ jobs:
             gcloud auth configure-docker -q  
         # Push image to Google Container Registry
       - name: Build
+        env:
+          PROJECT_ID: ${{ secrets.PROJECT_ID}}
         run: |-
           docker push eu.gcr.io/$PROJECT_ID/wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
          # docker login
