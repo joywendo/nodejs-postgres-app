@@ -54,7 +54,7 @@ jobs:
         env:
           PROJECT_ID: ${{ secrets.PROJECT_ID}}
         run: |-
-          docker push eu.gcr.io/$PROJECT_ID/wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
+          docker push eu.gcr.io/$PROJECT_ID/wendokingoo/nodejs-postgres-app:$IMAGE_TAG
          # docker login
 
       - name: Login to DockerHub
