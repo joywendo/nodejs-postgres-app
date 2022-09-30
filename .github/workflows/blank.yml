@@ -54,7 +54,7 @@ jobs:
         # Push image to Google Container Registry
       - name: Build
         run: |-
-            docker push eu.gcr.io/$PROJECT_ID/$GOOGLE_CREDENTIALS:$IMAGE_TAG
+            docker push $GOOGLE_CREDENTIALS:$IMAGE_TAG
 
          # docker login
 
