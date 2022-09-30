@@ -37,6 +37,8 @@ jobs:
         # Configure docker to use the gcloud command-line tool as a credential helper
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
+      
+      - name: 'Set docker configuration'
         run: |
             gcloud auth configure-docker europe-west1-docker.pkg.dev
 
