@@ -48,7 +48,7 @@ jobs:
         # Configure docker to use the gcloud command-line tool as a credential helper
       - name: Push image to gcr
         run: |
-            gcloud auth configure-docker europe-west1-docker.pkg.dev -y
+            gcloud auth configure-docker europe-west1-docker.pkg.dev
         # Push image to Google Container Registry
       - name: Build
         env:
