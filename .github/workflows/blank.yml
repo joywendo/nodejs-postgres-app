@@ -48,7 +48,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           ls -al
-          docker build -t europe-west1-docker.pkg.dev/hopeful-object-363312/first-image:$IMAGE_TAG .
+          docker build -t hopeful-object-363312/first-image:$IMAGE_TAG .
           echo "docker built"
 
         # Push image to Google Container Registry
@@ -56,7 +56,7 @@ jobs:
         env:
           PROJECT_ID: ${{ secrets.PROJECT_ID}}
         run: |
-          docker push europe-west1-docker.pkg.dev/hopeful-object-363312/first-image:$IMAGE_TAG
+          docker push hopeful-object-363312/first-image:$IMAGE_TAG
          # docker login
          # europe-west1-docker.pkg.dev/hopeful-object-363312/first-image
 
