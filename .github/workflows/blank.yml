@@ -53,8 +53,7 @@ jobs:
         # Push image to Google Container Registry
       - name: Build
         run: |-
-          docker push 
-          eu.gcr.io/$PROJECT_ID/wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
+          docker push eu.gcr.io/$PROJECT_ID/wendokingoo/nodejs-postgres-app:$IMAGE_TAG .
 
          # docker login
 
