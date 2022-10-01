@@ -54,7 +54,7 @@ jobs:
           echo "docker built"
 
         # Push image to Google Container Registry
-      - name: Pushing Image
+      - name: Pushing Image to Google artifact registry
         env:
           PROJECT_ID: ${{ secrets.PROJECT_ID}}
           IMAGE_TAG: ${{ github.sha }}
