@@ -50,7 +50,7 @@ jobs:
           PROJECT_ID: ${{ secrets.PROJECT_ID}}
         run: |
           ls -al
-          docker build -t europe-west1-docker.pkg.dev/$PROJECT_ID/first-image:$IMAGE_TAG .
+          docker build -t europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG .
           echo "docker built"
 
         # Push image to Google Container Registry
