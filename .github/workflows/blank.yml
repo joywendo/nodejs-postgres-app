@@ -63,7 +63,7 @@ jobs:
 
       - name: Deploy Docker image to cloud run 
         run: |
-          gcloud run deploy europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG
+          gcloud run deploy europe-west1-docker.pkg.dev/$PROJECT_ID/first-image:$IMAGE_TAG
 
          # docker login
          # europe-west1-docker.pkg.dev/hopeful-object-363312/first-image
