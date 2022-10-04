@@ -62,6 +62,9 @@ jobs:
           docker push europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG
 
       - name: Deploy Docker image to cloud run 
+        env:
+          PROJECT_ID: ${{ secrets.PROJECT_ID}}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           gcloud run deploy europe-west1-docker.pkg.dev/$PROJECT_ID/first-image:$IMAGE_TAG
 
