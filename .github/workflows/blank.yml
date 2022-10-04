@@ -65,8 +65,9 @@ jobs:
         env:
           PROJECT_ID: ${{ secrets.PROJECT_ID}}
           IMAGE_TAG: ${{ github.sha }}
+          SERVICE_IMAGE: first-image
         run: |
-          gcloud run deploy --image europe-west1-docker.pkg.dev/$PROJECT_ID/first-image:$IMAGE_TAG
+          gcloud run deploy "$SERVICE_IMAGE" --image europe-west1-docker.pkg.dev/$PROJECT_ID/$SERVICE_IMAGE:$IMAGE_TAG
 
          # docker login
          # europe-west1-docker.pkg.dev/hopeful-object-363312/first-image
