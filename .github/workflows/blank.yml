@@ -44,7 +44,7 @@ jobs:
 
       # building image using docker
       # us-east1-docker.pkg.dev/my-project/my-repo/test-image
-      - name: Building docker Image
+      - name: Building Docker Image
         env:
           IMAGE_TAG: ${{ github.sha }}
           PROJECT_ID: ${{ secrets.PROJECT_ID}}
