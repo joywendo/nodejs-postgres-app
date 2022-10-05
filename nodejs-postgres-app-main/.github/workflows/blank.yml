@@ -1,0 +1,86 @@
+# This is a basic workflow to help you get started with Actions
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+    
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3 
+      # Installs node modules
+      - name: Check out Source Code
+        uses: actions/checkout@v2
+      - name: Setup Nodejs
+        uses: actions/setup-node@v1
+
+      # steps
+      # configure GCR credentials
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0.4.0'
+        with:
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}' 
+          project_id: ${{ secrets.PROJECT_ID }}
+          # export_default_credentials: true
+
+        # Configure docker to use the gcloud command-line tool as a credential helper
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+      
+      - name: 'Set docker configuration'
+        run: |
+          gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+      # building image using docker
+      # us-east1-docker.pkg.dev/my-project/my-repo/test-image
+      - name: Building image
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID}}
+        run: |
+          ls -al
+          docker build -t europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG .
+          echo "docker built"
+
+        # Push image to Google Container Registry
+      - name: Pushing Image to Google Artifact registry,
+        env:
+          PROJECT_ID: ${{ secrets.PROJECT_ID}}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker push europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG
+
+      - name: Deploy Docker Image to Google Cloud Run
+        env:
+          PROJECT_ID: ${{ secrets.PROJECT_ID}}
+          IMAGE_TAG: ${{ github.sha }}
+          REPO_NM: first-image
+          MY_REGION: europe-west1
+        run: |
+          gcloud run deploy "$REPO_NM" --platform managed --allow-unauthenticated  --region "$MY_REGION" --image europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NM:$IMAGE_TAG
+
+         # docker login
+         # europe-west1-docker.pkg.dev/hopeful-object-363312/first-image
+
+      # - name: Login to DockerHub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKER_HUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # - name: Build and push to dockerhub
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     push: true
+      #     tags: wendokingoo/nodejs-postgres-app:latest
