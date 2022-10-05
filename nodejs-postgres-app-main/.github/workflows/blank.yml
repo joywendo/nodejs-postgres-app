@@ -61,7 +61,7 @@ jobs:
         run: |
           docker push europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG
 
-      - name: Deploy Docker Image to Google Cloud Run. 
+      - name: Deploy Docker Image to Google Cloud Run 
         env:
           PROJECT_ID: ${{ secrets.PROJECT_ID}}
           IMAGE_TAG: ${{ github.sha }}
