@@ -68,7 +68,7 @@ jobs:
           REPO_NM: first-image
           MY_REGION: europe-west1
         run: |
-          gcloud run deploy "$REPO_NM" --platform managed --allow-unauthenticated  --region "$MY_REGION" --image europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NM/$IMAGE_TAG
+          gcloud run deploy "$REPO_NM" --platform managed --allow-unauthenticated  --region "$MY_REGION" --port 8080 --image europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NM/$IMAGE_TAG
           
 
          # docker login
