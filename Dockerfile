@@ -4,13 +4,14 @@ WORKDIR /usr/sc/app
 
 COPY . .
 
-RUN ls -al
+RUN ls -al && \
+    mv prod.env .env
 
 # Copy and download dependencies
 # COPY package.json package-lock.json
 
 RUN npm install
 
-EXPOSE 4000
+EXPOSE 8080
 
 CMD npm start
