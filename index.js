@@ -19,6 +19,7 @@ const pool = new Pool({
     port: process.env.DB_PORT
 });
   
+console.log("Config", pool)
   
 /* To handle the HTTP Methods Body Parser 
    is used, Generally used to extract the 
