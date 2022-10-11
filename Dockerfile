@@ -4,8 +4,7 @@ WORKDIR /usr/sc/app
 
 COPY . .
 
-RUN ls -al && \
-    mv prod.env .env
+RUN ls -al 
 
 # Copy and download dependencies
 # COPY package.json package-lock.json
