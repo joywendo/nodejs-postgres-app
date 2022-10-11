@@ -7,6 +7,6 @@ This is a simple backend app that creates; builds a docker image pushes the imag
 - Google Artifact Registry
 - Docker
 - Google Cloud Run
-
+- Googele Cloud SQL
 
 
