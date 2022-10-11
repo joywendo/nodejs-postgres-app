@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Create backend using Node,Express,Postgres",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "joy",
+  "license": "ISC",
+  "dependencies": {
+    "body": "^5.1.0",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "forever": "^4.0.3",
+    "parser": "^0.1.4",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4"
+  }
+}
