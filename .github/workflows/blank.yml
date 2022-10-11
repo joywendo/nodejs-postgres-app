@@ -69,8 +69,8 @@ jobs:
           MY_REGION: europe-west1
           DB_VARS: ${{ secrets.DB_CONFIGS}}
         run: |
-          gcloud run deploy "$REPO_NM" --platform managed --allow-unauthenticated  --set-env-vars "$DB_VARS"
-          --region "$MY_REGION" --image europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NM/$IMAGE_TAG
+          gcloud run deploy "$REPO_NM" --platform managed --allow-unauthenticated
+          --region "$MY_REGION" --image europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NM/$IMAGE_TAG --set-env-vars "$DB_VARS"
           
 
          # docker login
