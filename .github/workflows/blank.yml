@@ -82,7 +82,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 ​
-    - name: Build tag and push to ECR auth module
+    - name: Build tag and push to ECR in AWS
       id: build-image
       env:
         ECR_REGISTRY: ${{steps.login-ecr.outputs.registry}}
