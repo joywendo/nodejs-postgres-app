@@ -90,8 +90,8 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/auth-repo:$IMAGE_TAG .
           echo "Pushing to ECR ..."
-          docker push $ECR_REGISTRY/auth-repo:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/auth-repo:$IMAGE_TAG"
+          docker push $ECR_REGISTRY/backend:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/backend:$IMAGE_TAG"
          # docker login
          # europe-west1-docker.pkg.dev/hopeful-object-363312/first-image
 
