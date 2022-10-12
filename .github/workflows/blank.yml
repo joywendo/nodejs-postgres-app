@@ -94,11 +94,12 @@ jobs:
           echo "image=$ECR_REGISTRY/backend:$IMAGE_TAG"  >> $GITHUB_ENV
 
 
-        - name: Create new task definition in AWS
-          run: |
-            aws ecs register-task-definition \
-            --generate-cli-skeleton > task-definition.json
-            echo "task definition created"
+      - name: Create new task definition in AWS
+        run: |
+          aws ecs register-task-definition \
+          --generate-cli-skeleton > task-definition.json
+          echo "task definition created"
+            
       # - name: Fill in the new image ID in the Amazon ECS task definition
       #   id: task-def
       #   uses: aws-actions/amazon-ecs-render-task-definition@v1
