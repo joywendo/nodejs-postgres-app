@@ -102,12 +102,12 @@ jobs:
           image: amazon/amazon-ecs-sample:latest
           environment-variables: "LOG_LEVEL=info"
 
-     - name: Deploy to Amazon ECS service
-       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-       with:
-        task-definition: ${{ steps.render-web-container.outputs.task-definition }}
-        service: sample-app-service
-        cluster: sample-cluster
+      - name: Deploy to Amazon ECS service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-web-container.outputs.task-definition }}
+          service: sample-app-service
+          cluster: sample-cluster
      
          # docker login
          # europe-west1-docker.pkg.dev/hopeful-object-363312/first-image
