@@ -112,7 +112,7 @@ jobs:
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: sample-app
-          cluster: sample-cluster
+          cluster: default
           wait-for-service-stability: true
 
       # - name: Render Amazon ECS task definition
