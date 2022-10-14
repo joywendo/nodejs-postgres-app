@@ -103,15 +103,15 @@ jobs:
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: first-run-task-definition.json
-          container-name: sample-app
+          task-definition: sample-app-task-def.json
+          container-name: sample
           image: ${{ env.image}}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: sample-app
+          service: sample-app-service-3
           cluster: default
           wait-for-service-stability: true
 
