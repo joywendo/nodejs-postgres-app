@@ -93,21 +93,43 @@ jobs:
           docker push $ECR_REGISTRY/backend:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/backend:$IMAGE_TAG"  >> $GITHUB_ENV
       
-      - name: Render Amazon ECS task definition
-        id: render-web-container
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition first-run-task-definition --query taskDefinition > first-run-task-definition.json
+          echo "::set-output name=taskdef::first-run-task-definition.json"
+  ​
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition:  first-run-task-definition.json
+          task-definition: first-run-task-definition.json
           container-name: sample-app
-          image: amazon/amazon-ecs-sample:latest
-          environment-variables: "LOG_LEVEL=info"
-
-      - name: Deploy to Amazon ECS service
+          image: ${{ steps.build-image.outputs.image }}
+​
+      - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.render-web-container.outputs.task-definition }}
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: sample-app-service
           cluster: sample-cluster
+          wait-for-service-stability: true
+  ​
+
+      # - name: Render Amazon ECS task definition
+      #   id: render-web-container
+      #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+      #   with:
+      #     task-definition:  first-run-task-definition.json
+      #     container-name: sample-app
+      #     image: amazon/amazon-ecs-sample:latest
+      #     environment-variables: "LOG_LEVEL=info"
+
+      # - name: Deploy to Amazon ECS service
+      #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      #   with:
+      #     task-definition: ${{ steps.render-web-container.outputs.task-definition }}
+      #     service: sample-app-service
+      #     cluster: sample-cluster
      
          # docker login
          # europe-west1-docker.pkg.dev/hopeful-object-363312/first-image
