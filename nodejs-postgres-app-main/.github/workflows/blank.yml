@@ -129,15 +129,22 @@ jobs:
 
         - name: 'Deploy to Azure Container Instances'
           uses: 'azure/aci-deploy@v1'
+          env:
+          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_NAME: backend
+          REPO: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          U_NAME: ${{ secrets.REGISTRY_USERNAME }}
+          PSWD: ${{ secrets.REGISTRY_PASSWORD }}
           with:
             resource-group: ${{ secrets.RESOURCE_GROUP }}
             dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
-            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend:${{ github.sha }}
-            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            registry-username: ${{ secrets.REGISTRY_USERNAME }}
-            registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            name: BackendJoy
+            image: $REPO/$IMAGE_NAME:$IMAGE_TAG
+            registry-login-server: $REPO
+            registry-username: $U_NAME
+            registry-password: $PSWD
+            name: backend
             location: 'east us'
+            
 
       # - name: Render Amazon ECS task definition
       #   id: render-web-container
