@@ -64,12 +64,12 @@ app.get('/testdata', async (req, res, next) => {
   
 // Require the Routes API  
 // Create a Server and run it on the port 5000
-const server = app.listen(4000, function () {
-    let host = server.address().address
-    // let port = server.address().port
-    console.log("Server running ...")
-    // Starting the Server at the port 5000
-})
+// const server = app.listen(4000, function () {
+//     let host = server.address().address
+//     // let port = server.address().port
+//     console.log("Server running ...")
+//     // Starting the Server at the port 5000
+// })
             
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
