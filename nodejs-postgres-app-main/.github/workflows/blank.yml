@@ -136,7 +136,7 @@ jobs:
             registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
             registry-username: ${{ secrets.REGISTRY_USERNAME }}
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            name: backend-c
+            name: backend1
             location: 'east us'
 
       # - name: Render Amazon ECS task definition
