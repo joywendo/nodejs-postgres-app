@@ -96,6 +96,8 @@ jobs:
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
             name: backend-c
             location: 'east us' 
+
+
       # - name: Configure AWS credentials
       #   uses: aws-actions/configure-aws-credentials@v1
       #   with:
