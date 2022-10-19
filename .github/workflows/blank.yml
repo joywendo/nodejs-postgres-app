@@ -41,7 +41,6 @@ jobs:
       - name: 'Set docker configuration'
         run: |
           gcloud auth configure-docker europe-west1-docker.pkg.dev
-
       # building image using docker
       # us-east1-docker.pkg.dev/my-project/my-repo/test-image
       - name: Building Docker Image
@@ -52,7 +51,6 @@ jobs:
           ls -al
           docker build -t europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG .
           echo "docker built"
-
         # Push image to Google Container Registry
       - name: Pushing Image to Google Artifact registry,
         env:
@@ -60,7 +58,6 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker push europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG
-
       - name: Deploy Docker image to Google Cloud Run 
         env:
           PROJECT_ID: ${{ secrets.PROJECT_ID}}
@@ -97,8 +94,6 @@ jobs:
         run: |
           aws ecs describe-task-definition --task-definition sample-app-task-def --query taskDefinition > sample-app-task-def.json
           echo "::set-output name=taskdef::sample-app-task-def.json"
-
-
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -113,7 +108,36 @@ jobs:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
           service: sample-app-service-3
           cluster: default
-          wait-for-service-stability: true
+          wait-for-service-stability: false
+          
+      # configure Azure credentials
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+        - name: 'Build and push image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+        
+        - run: |
+            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend${{ github.sha }}
+            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend:${{ github.sha }}
+
+        - name: 'Deploy to Azure Container Instances'
+          uses: 'azure/aci-deploy@v1'
+          with:
+            resource-group: ${{ secrets.RESOURCE_GROUP }}
+            dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
+            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend:${{ github.sha }}
+            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            registry-username: ${{ secrets.REGISTRY_USERNAME }}
+            registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+            name: backend1
+            location: 'east us'
 
       # - name: Render Amazon ECS task definition
       #   id: render-web-container
