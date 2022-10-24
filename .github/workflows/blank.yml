@@ -68,32 +68,32 @@ jobs:
       #     gcloud run deploy "$REPO_NM" --platform managed --allow-unauthenticated --set-env-vars "$DB_VARS" --region "$MY_REGION" --image europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NM/$IMAGE_TAG 
           
         # configure Azure credentials
-        - name: 'Login via Azure CLI'
-          uses: azure/login@v1
-          with:
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-        - name: 'Build and push image'
-          uses: azure/docker-login@v1
-          with:
+      - name: 'Build and push image'
+        uses: azure/docker-login@v1
+        with:
             login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
         
-        - run: |
+      - run: |
             docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend:${{ github.sha }}
             docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend:${{ github.sha }}
 
-        - name: 'Deploy to Azure Container Instances'
-          uses: 'azure/aci-deploy@v1'
-          env:
+      - name: 'Deploy to Azure Container Instances'
+        uses: 'azure/aci-deploy@v1'
+        env:
           IMAGE_TAG: ${{ github.sha }}
           IMAGE_NAME: backend
           REPO: ${{ secrets.REGISTRY_LOGIN_SERVER }}
           U_NAME: ${{ secrets.REGISTRY_USERNAME }}
           PSWD: ${{ secrets.REGISTRY_PASSWORD }}
           R_GRP : ${{ secrets.RESOURCE_GROUP }}
-          with:
+        with:
             resource-group: $R_GRP
             dns-name-label: $R_GRP ${{ github.run_number }}
             image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend:${{ github.sha }}
