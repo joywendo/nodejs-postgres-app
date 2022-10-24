@@ -24,148 +24,124 @@ jobs:
       - name: Setup Nodejs
         uses: actions/setup-node@v1
 
-#       # steps
-#       # configure GCR credentials
-#       - id: 'auth'
-#         name: 'Authenticate to Google Cloud'
-#         uses: 'google-github-actions/auth@v0.4.0'
-#         with:
-#           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}' 
-#           project_id: ${{ secrets.PROJECT_ID }}
-#           # export_default_credentials: true
+      # # steps
+      # # configure GCR credentials
+      # - id: 'auth'
+      #   name: 'Authenticate to Google Cloud'
+      #   uses: 'google-github-actions/auth@v0.4.0'
+      #   with:
+      #     credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}' 
+      #     project_id: ${{ secrets.PROJECT_ID }}
+      #     # export_default_credentials: true
 
-#         # Configure docker to use the gcloud command-line tool as a credential helper
-#       - name: 'Set up Cloud SDK'
-#         uses: 'google-github-actions/setup-gcloud@v0'
+      #   # Configure docker to use the gcloud command-line tool as a credential helper
+      # - name: 'Set up Cloud SDK'
+      #   uses: 'google-github-actions/setup-gcloud@v0'
       
-#       - name: 'Set docker configuration'
-#         run: |
-#           gcloud auth configure-docker europe-west1-docker.pkg.dev
-#       # building image using docker
-#       # us-east1-docker.pkg.dev/my-project/my-repo/test-image
-#       - name: Building Docker Image
-#         env:
-#           IMAGE_TAG: ${{ github.sha }}
-#           PROJECT_ID: ${{ secrets.PROJECT_ID}}
-#         run: |
-#           ls -al
-#           docker build -t europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG .
-#           echo "docker built"
-#         # Push image to Google Container Registry
-#       - name: Pushing Image to Google Artifact registry,
-#         env:
-#           PROJECT_ID: ${{ secrets.PROJECT_ID}}
-#           IMAGE_TAG: ${{ github.sha }}
-#         run: |
-#           docker push europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG
-#       - name: Deploy Docker image to Google Cloud Run 
-#         env:
-#           PROJECT_ID: ${{ secrets.PROJECT_ID}}
-#           IMAGE_TAG: ${{ github.sha }}
-#           REPO_NM: first-image
-#           MY_REGION: europe-west1
-#           DB_VARS: ${{ secrets.DB_CONFIGS}}
-#         run: |
-#           gcloud run deploy "$REPO_NM" --platform managed --allow-unauthenticated --set-env-vars "$DB_VARS" --region "$MY_REGION" --image europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NM/$IMAGE_TAG 
+      # - name: 'Set docker configuration'
+      #   run: |
+      #     gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+      # - name: Building Docker Image
+      #   env:
+      #     IMAGE_TAG: ${{ github.sha }}
+      #     PROJECT_ID: ${{ secrets.PROJECT_ID}}
+      #   run: |
+      #     ls -al
+      #     docker build -t europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG .
+      #     echo "docker built"
+      #   # Push image to Google Container Registry
+      # - name: Pushing Image to Google Artifact registry,
+      #   env:
+      #     PROJECT_ID: ${{ secrets.PROJECT_ID}}
+      #     IMAGE_TAG: ${{ github.sha }}
+      #   run: |
+      #     docker push europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG
+      # - name: Deploy Docker image to Google Cloud Run 
+      #   env:
+      #     PROJECT_ID: ${{ secrets.PROJECT_ID}}
+      #     IMAGE_TAG: ${{ github.sha }}
+      #     REPO_NM: first-image
+      #     MY_REGION: europe-west1
+      #     DB_VARS: ${{ secrets.DB_CONFIGS}}
+      #   run: |
+      #     gcloud run deploy "$REPO_NM" --platform managed --allow-unauthenticated --set-env-vars "$DB_VARS" --region "$MY_REGION" --image europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NM/$IMAGE_TAG 
           
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
-#           aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
-#           aws-region: us-east-1
+        # configure Azure credentials
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-#       - name: Login to AWS ECR
-#         id: login-ecr
-#         uses: aws-actions/amazon-ecr-login@v1
-      
-#       - name: Build tag and push to ECR in AWS
-#         id: build-image
-#         env:
-#           ECR_REGISTRY: ${{steps.login-ecr.outputs.registry}}
-#           IMAGE_TAG: ${{ github.sha }}
-#         run: |
-#           docker build -t $ECR_REGISTRY/backend:$IMAGE_TAG .
-#           echo "Pushing to ECR ..."
-#           docker push $ECR_REGISTRY/backend:$IMAGE_TAG
-#           echo "image=$ECR_REGISTRY/backend:$IMAGE_TAG"  >> $GITHUB_ENV
-      
-#       - name: Download task definition
-#         run: |
-#           aws ecs describe-task-definition --task-definition sample-app-task-def --query taskDefinition > sample-app-task-def.json
-#           echo "::set-output name=taskdef::sample-app-task-def.json"
-#       - name: Fill in the new image ID in the Amazon ECS task definition
-#         id: task-def
-#         uses: aws-actions/amazon-ecs-render-task-definition@v1
-#         with:
-#           task-definition: sample-app-task-def.json
-#           container-name: sample
-#           image: ${{ env.image}}
-
-#       - name: Deploy Amazon ECS task definition
-#         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-#         with:
-#           task-definition: ${{ steps.task-def.outputs.task-definition }}
-#           service: sample-app-service-3
-#           cluster: default
-#           wait-for-service-stability: false
-          
-#       # configure Azure credentials
-#       - name: 'Login via Azure CLI'
-#         uses: azure/login@v1
-#         with:
-#           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: 'Build and push image'
-        uses: azure/docker-login@v1
-        with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
+        - name: 'Build and push image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
         
-      - run: |
-            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend${{ github.sha }}
+        - run: |
+            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend:${{ github.sha }}
             docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend:${{ github.sha }}
 
-      - name: 'Deploy to Azure Container Instances'
-        uses: 'azure/aci-deploy@v1'
-        with:
-            resource-group: ${{ secrets.RESOURCE_GROUP }}
-            dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
+        - name: 'Deploy to Azure Container Instances'
+          uses: 'azure/aci-deploy@v1'
+          env:
+          IMAGE_TAG: ${{ github.sha }}
+          IMAGE_NAME: backend
+          REPO: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          U_NAME: ${{ secrets.REGISTRY_USERNAME }}
+          PSWD: ${{ secrets.REGISTRY_PASSWORD }}
+          R_GRP : ${{ secrets.RESOURCE_GROUP }}
+          with:
+            resource-group: $R_GRP
+            dns-name-label: $R_GRP ${{ github.run_number }}
             image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/backend:${{ github.sha }}
-            registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            registry-username: ${{ secrets.REGISTRY_USERNAME }}
-            registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            name: backend1
+            registry-login-server: $REPO
+            registry-username: $U_NAME
+            registry-password: $PSWD
+            name: backend
             location: 'east us'
+            
 
-      # - name: Render Amazon ECS task definition
-      #   id: render-web-container
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+      #     aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+      #     aws-region: us-east-1
+
+      # - name: Login to AWS ECR
+      #   id: login-ecr
+      #   uses: aws-actions/amazon-ecr-login@v1
+      
+      # - name: Build tag and push to ECR in AWS
+      #   id: build-image
+      #   env:
+      #     ECR_REGISTRY: ${{steps.login-ecr.outputs.registry}}
+      #     IMAGE_TAG: ${{ github.sha }}
+      #   run: |
+      #     docker build -t $ECR_REGISTRY/backend:$IMAGE_TAG .
+      #     echo "Pushing to ECR ..."
+      #     docker push $ECR_REGISTRY/backend:$IMAGE_TAG
+      #     echo "image=$ECR_REGISTRY/backend:$IMAGE_TAG"  >> $GITHUB_ENV
+      
+      # - name: Download task definition
+      #   run: |
+      #     aws ecs describe-task-definition --task-definition sample-app-task-def --query taskDefinition > sample-app-task-def.json
+      #     echo "::set-output name=taskdef::sample-app-task-def.json"
+      # - name: Fill in the new image ID in the Amazon ECS task definition
+      #   id: task-def
       #   uses: aws-actions/amazon-ecs-render-task-definition@v1
       #   with:
-      #     task-definition:  first-run-task-definition.json
-      #     container-name: sample-app
-      #     image: amazon/amazon-ecs-sample:latest
-      #     environment-variables: "LOG_LEVEL=info"
+      #     task-definition: sample-app-task-def.json
+      #     container-name: sample
+      #     image: ${{ env.image}}
 
-      # - name: Deploy to Amazon ECS service
+      # - name: Deploy Amazon ECS task definition
       #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       #   with:
-      #     task-definition: ${{ steps.render-web-container.outputs.task-definition }}
-      #     service: sample-app-service
-      #     cluster: sample-cluster
-     
-         # docker login
-         # europe-west1-docker.pkg.dev/hopeful-object-363312/first-image
-
-      # - name: Login to DockerHub
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKER_HUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      # - name: Build and push to dockerhub
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     push: true
-      #     tags: wendokingoo/nodejs-postgres-app:latest
+      #     task-definition: ${{ steps.task-def.outputs.task-definition }}
+      #     service: sample-app-service-3
+      #     cluster: default
+      #     wait-for-service-stability: false
