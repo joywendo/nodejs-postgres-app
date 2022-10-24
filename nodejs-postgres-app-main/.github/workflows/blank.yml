@@ -24,55 +24,54 @@ jobs:
       - name: Setup Nodejs
         uses: actions/setup-node@v1
 
-      # steps
-      # configure GCR credentials
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0.4.0'
-        with:
-          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}' 
-          project_id: ${{ secrets.PROJECT_ID }}
-          # export_default_credentials: true
+      # # steps
+      # # configure GCR credentials
+      # - id: 'auth'
+      #   name: 'Authenticate to Google Cloud'
+      #   uses: 'google-github-actions/auth@v0.4.0'
+      #   with:
+      #     credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}' 
+      #     project_id: ${{ secrets.PROJECT_ID }}
+      #     # export_default_credentials: true
 
-        # Configure docker to use the gcloud command-line tool as a credential helper
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v0'
+      #   # Configure docker to use the gcloud command-line tool as a credential helper
+      # - name: 'Set up Cloud SDK'
+      #   uses: 'google-github-actions/setup-gcloud@v0'
       
-      - name: 'Set docker configuration'
-        run: |
-          gcloud auth configure-docker europe-west1-docker.pkg.dev
-      # building image using docker
-      # us-east1-docker.pkg.dev/my-project/my-repo/test-image
-      - name: Building Docker Image
-        env:
-          IMAGE_TAG: ${{ github.sha }}
-          PROJECT_ID: ${{ secrets.PROJECT_ID}}
-        run: |
-          ls -al
-          docker build -t europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG .
-          echo "docker built"
-        # Push image to Google Container Registry
-      - name: Pushing Image to Google Artifact registry,
-        env:
-          PROJECT_ID: ${{ secrets.PROJECT_ID}}
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker push europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG
-      - name: Deploy Docker image to Google Cloud Run 
-        env:
-          PROJECT_ID: ${{ secrets.PROJECT_ID}}
-          IMAGE_TAG: ${{ github.sha }}
-          REPO_NM: first-image
-          MY_REGION: europe-west1
-          DB_VARS: ${{ secrets.DB_CONFIGS}}
-        run: |
-          gcloud run deploy "$REPO_NM" --platform managed --allow-unauthenticated --set-env-vars "$DB_VARS" --region "$MY_REGION" --image europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NM/$IMAGE_TAG 
+      # - name: 'Set docker configuration'
+      #   run: |
+      #     gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+      # - name: Building Docker Image
+      #   env:
+      #     IMAGE_TAG: ${{ github.sha }}
+      #     PROJECT_ID: ${{ secrets.PROJECT_ID}}
+      #   run: |
+      #     ls -al
+      #     docker build -t europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG .
+      #     echo "docker built"
+      #   # Push image to Google Container Registry
+      # - name: Pushing Image to Google Artifact registry,
+      #   env:
+      #     PROJECT_ID: ${{ secrets.PROJECT_ID}}
+      #     IMAGE_TAG: ${{ github.sha }}
+      #   run: |
+      #     docker push europe-west1-docker.pkg.dev/$PROJECT_ID/first-image/$IMAGE_TAG
+      # - name: Deploy Docker image to Google Cloud Run 
+      #   env:
+      #     PROJECT_ID: ${{ secrets.PROJECT_ID}}
+      #     IMAGE_TAG: ${{ github.sha }}
+      #     REPO_NM: first-image
+      #     MY_REGION: europe-west1
+      #     DB_VARS: ${{ secrets.DB_CONFIGS}}
+      #   run: |
+      #     gcloud run deploy "$REPO_NM" --platform managed --allow-unauthenticated --set-env-vars "$DB_VARS" --region "$MY_REGION" --image europe-west1-docker.pkg.dev/$PROJECT_ID/$REPO_NM/$IMAGE_TAG 
           
-      # configure Azure credentials
-      - name: 'Login via Azure CLI'
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # # configure Azure credentials
+      # - name: 'Login via Azure CLI'
+      #   uses: azure/login@v1
+      #   with:
+      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
 
         - name: 'Build and push image'
           uses: azure/docker-login@v1
